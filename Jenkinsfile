@@ -38,7 +38,7 @@ pipeline {
       steps { 
         echo "Running Static application security testing using SonarQube Scanner ..."
         withSonarQubeEnv('sonarqube-server') {
-            sh 'mvn sonar:sonar -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report.html -Dsonar.projectName=wezvatech'
+            sh 'mvn sonar:sonar -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report.html -Dsonar.projectName=ci-demo'
        }
       }
     }
@@ -72,14 +72,14 @@ pipeline {
    stage('Stage VII: Scan Image ') {
       steps { 
         echo "Scanning Image for Vulnerabilities"
-        sh "trivy image --scanners vuln --offline-scan adamtravis/democicd:latest > trivyresults.txt"
+        sh "trivy image --scanners vuln --offline-scan ${env.registry}:latest > trivyresults.txt"
         }
     }
           
    stage('Stage VIII: Smoke Test ') {
       steps { 
         echo "Smoke Test the Image"
-        sh "docker run -d --name smokerun -p 8080:8080 adamtravis/democicd"
+        sh "docker run -d --name smokerun -p 8080:8080 ${env.registry}"
         sh "sleep 90; ./check.sh"
         sh "docker rm --force smokerun"
         }
@@ -88,4 +88,5 @@ pipeline {
   }
 
 }
+
 
