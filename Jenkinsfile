@@ -2,14 +2,14 @@
 pipeline {
   agent { label 'build' }
    environment { 
-        registry = "adamtravis/democicd" 
+        registry = "ashwith26/democicd" 
         registryCredential = 'dockerhub' 
    }
 
   stages {
     stage('Checkout') {
       steps {
-        git branch: 'main', credentialsId: 'GitlabCred', url: 'https://gitlab.com/learndevopseasy/devsecops/springboot-build-pipeline.git'
+        git branch: 'main', credentialsId: 'github-creds', url: 'https://github.com/ashwith26/springboot-build-pipeline.git'
       }
     }
   
@@ -37,7 +37,7 @@ pipeline {
    stage('Stage IV: SAST') {
       steps { 
         echo "Running Static application security testing using SonarQube Scanner ..."
-        withSonarQubeEnv('mysonarqube') {
+        withSonarQubeEnv('sonarqube-server') {
             sh 'mvn sonar:sonar -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json -Dsonar.dependencyCheck.htmlReportPath=target/dependency-check-report.html -Dsonar.projectName=wezvatech'
        }
       }
@@ -86,4 +86,5 @@ pipeline {
     }
 
   }
+
 }
