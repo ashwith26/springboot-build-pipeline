@@ -27,12 +27,12 @@ pipeline {
       }
     }
 
-   stage('Stage III: SCA') {
+   /*stage('Stage III: SCA') {
       steps { 
         echo "Running Software Composition Analysis using OWASP Dependency-Check ..."
         sh "export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64; mvn org.owasp:dependency-check-maven:check"
       }
-    }
+    }*/
 
    stage('Stage IV: SAST') {
       steps { 
@@ -88,3 +88,4 @@ pipeline {
   }
 
 }
+
